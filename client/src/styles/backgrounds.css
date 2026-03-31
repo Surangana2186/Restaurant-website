@@ -1,0 +1,180 @@
+/* Background Image Options for Restaurant Website */
+
+/* Consistent Background for All Pages */
+.hero-bg-1,
+.hero-bg-2,
+.hero-bg-3,
+.hero-bg-4,
+.hero-bg-5,
+.hero-bg-6,
+.hero-bg-7,
+.hero-bg-8,
+.hero-bg-9,
+.hero-bg-10,
+.hero-bg-11,
+.hero-bg-12,
+.hero-bg-13 {
+  background: linear-gradient(rgba(220, 38, 38, 0.3), rgba(153, 27, 27, 0.3)),
+              url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&h=1080&fit=crop&auto=format') center/cover;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* More transparent background specifically for reservations */
+.reservation-bg-1,
+.reservation-bg-2,
+.reservation-bg-3,
+.reservation-bg-4,
+.reservation-bg-5 {
+  background: linear-gradient(rgba(220, 38, 38, 0.4), rgba(153, 27, 27, 0.4)),
+              url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&h=1080&fit=crop&auto=format') center/cover;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* More transparent background specifically for contact page */
+.contact-bg-1,
+.contact-bg-2,
+.contact-bg-3,
+.contact-bg-4,
+.contact-bg-5 {
+  background: linear-gradient(rgba(220, 38, 38, 0.2), rgba(153, 27, 27, 0.2)),
+              url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&h=1080&fit=crop&auto=format') center/cover;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Option 9: Elegant Bar */
+.hero-bg-9 {
+  background: linear-gradient(rgba(220, 38, 38, 0.75), rgba(153, 27, 27, 0.75)),
+              url('https://images.unsplash.com/photo-1514933651103-005eec79c69e?w=1920&h=1080&fit=crop') center/cover;
+}
+
+/* Option 10: Modern Interior */
+.hero-bg-10 {
+  background: linear-gradient(rgba(220, 38, 38, 0.8), rgba(153, 27, 27, 0.8)),
+              url('https://images.unsplash.com/photo-1533777324565-f4cda356c8c2?w=1920&h=1080&fit=crop') center/cover;
+}
+
+/* Custom Background Pattern (Original) */
+.hero-bg-pattern {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+}
+
+.hero-bg-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+}
+
+/* Solid Color Options */
+.hero-bg-solid-red {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+}
+
+.hero-bg-solid-dark {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+.hero-bg-solid-blue {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+.hero-bg-solid-purple {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+/* Menu Section Backgrounds - Higher specificity */
+section.menu-section.menu-bg-1 {
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+              url('https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.menu-section.menu-bg-2 {
+  background: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
+              url('https://images.unsplash.com/photo-1504674900247-0877df81cc5b?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.menu-section.menu-bg-3 {
+  background: linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)),
+              url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.menu-section.menu-bg-4 {
+  background: linear-gradient(rgba(255, 255, 255, 0.87), rgba(255, 255, 255, 0.87)),
+              url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+/* Reservations Section Backgrounds - Higher specificity */
+section.reservations-section.reservation-bg-1 {
+  background: linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)),
+              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.reservations-section.reservation-bg-2 {
+  background: linear-gradient(rgba(255, 255, 255, 0.89), rgba(255, 255, 255, 0.89)),
+              url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.reservations-section.reservation-bg-3 {
+  background: linear-gradient(rgba(255, 255, 255, 0.91), rgba(255, 255, 255, 0.91)),
+              url('https://images.unsplash.com/photo-1533777324565-f4cda356c8c2?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.reservations-section.reservation-bg-4 {
+  background: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
+              url('https://images.unsplash.com/photo-1514933651103-005eec79c69e?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+/* About Section Backgrounds - Higher specificity */
+section.about-section.about-bg-1 {
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+              url('https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.about-section.about-bg-2 {
+  background: linear-gradient(rgba(255, 255, 255, 0.87), rgba(255, 255, 255, 0.87)),
+              url('https://images.unsplash.com/photo-1533777324565-f4cda356c8c2?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.about-section.about-bg-3 {
+  background: linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)),
+              url('https://images.unsplash.com/photo-1556910103-3c3d6f1c6dea?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.about-section.about-bg-4 {
+  background: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
+              url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+/* Contact Section Backgrounds - Higher specificity */
+section.contact-section.contact-bg-1 {
+  background: linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)),
+              url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.contact-section.contact-bg-2 {
+  background: linear-gradient(rgba(255, 255, 255, 0.89), rgba(255, 255, 255, 0.89)),
+              url('https://images.unsplash.com/photo-1514933651103-005eec79c69e?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.contact-section.contact-bg-3 {
+  background: linear-gradient(rgba(255, 255, 255, 0.91), rgba(255, 255, 255, 0.91)),
+              url('https://images.unsplash.com/photo-1544025162-d76694265947?w=1920&h=1080&fit=crop') center/cover !important;
+}
+
+section.contact-section.contact-bg-4 {
+  background: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)),
+              url('https://images.unsplash.com/photo-1504674900247-0877df81cc5b?w=1920&h=1080&fit=crop') center/cover !important;
+}

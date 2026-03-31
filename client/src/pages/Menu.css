@@ -1,0 +1,453 @@
+/* Menu Page Specific Styles - Scoped to avoid affecting other pages */
+.menu-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.menu-page .menu-container {
+  width: 100%;
+  margin: 0;
+  padding: 0 2rem;
+}
+
+.menu-page .menu-filters {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.menu-page .search-bar {
+  flex: 1;
+  min-width: 250px;
+}
+
+.menu-page .search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.menu-page .search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.menu-page .sort-options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.menu-page .sort-options label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.menu-page .sort-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.menu-page .sort-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.menu-page .menu-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #2c3e50;
+}
+
+.menu-page .menu-hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #dc2626;
+}
+
+.menu-page .header-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.menu-page .hero-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-page .hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: 800;
+  color: #dc2626;
+  text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);
+}
+
+.menu-page .hero-content p {
+  font-size: 1.3rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  color: #7f1d1d;
+}
+
+.menu-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.menu-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.category-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.category-btn.active {
+  background: white;
+  color: #667eea;
+  border-color: white;
+}
+
+.menu-page .menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.menu-page .menu-item-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transition: all 0.3s;
+}
+
+.menu-page .menu-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.menu-page .menu-item-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.menu-page .menu-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.menu-page .menu-item-card:hover .menu-item-image img {
+  transform: scale(1.05);
+}
+
+.veg-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #27ae60;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.menu-page .menu-item-content {
+  padding: 1.5rem;
+}
+
+.menu-page .menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.menu-page .rating {
+  color: #f39c12;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.menu-page .menu-item-name {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.menu-page .menu-item-category {
+  color: #667eea;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 15px;
+  display: inline-block;
+}
+
+.menu-page .menu-item-description {
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.menu-page .menu-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.menu-page .item-badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-page .veg-badge,
+.menu-page .non-veg-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+}
+
+.menu-page .veg-badge {
+  border: 1px solid #27ae60;
+}
+
+.menu-page .non-veg-badge {
+  border: 1px solid #e74c3c;
+}
+
+.menu-page .chef-special,
+.menu-page .spicy-badge,
+.menu-page .gluten-free-badge {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  padding: 0.2rem 0.4rem;
+  border-radius: 10px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+}
+
+.menu-page .chef-special {
+  border: 1px solid #f39c12;
+}
+
+.menu-page .spicy-badge {
+  border: 1px solid #e74c3c;
+}
+
+.menu-page .gluten-free-badge {
+  border: 1px solid #27ae60;
+}
+
+.menu-page .price {
+  color: #e74c3c;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.menu-page .add-to-cart-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.menu-page .add-to-cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.menu-page .add-to-cart-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .menu-page .menu-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-page {
+    padding: 1rem 0;
+  }
+
+  .menu-page .menu-header {
+    margin-bottom: 2rem;
+  }
+
+  .menu-page .menu-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .menu-page .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .menu-page .menu-item-content {
+    padding: 1rem;
+  }
+
+  .menu-page .menu-item-name {
+    font-size: 1.2rem;
+  }
+
+  .price {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-header h1 {
+    font-size: 2rem;
+  }
+
+  .menu-header p {
+    font-size: 1rem;
+  }
+
+  .categories {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .category-btn {
+    width: 200px;
+    text-align: center;
+  }
+
+  .menu-item-image {
+    height: 150px;
+  }
+
+  .menu-item-content {
+    padding: 0.75rem;
+  }
+
+  .add-to-cart-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Cart Success Message */
+.cart-success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #27ae60;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  z-index: 1000;
+  animation: slideIn 0.3s ease, slideOut 0.3s ease 1.7s;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

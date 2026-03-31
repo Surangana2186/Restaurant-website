@@ -1,0 +1,289 @@
+/* Single Page Scrolling Styles */
+.home-page {
+  scroll-behavior: smooth;
+}
+
+/* Section Styles - Cards with white backgrounds */
+.menu-section,
+.reservations-section,
+.about-section,
+.contact-section {
+  min-height: 100vh;
+  padding: 80px 20px 40px;
+  position: relative;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Content wrapper for better readability */
+.menu-section > *,
+.reservations-section > *,
+.about-section > *,
+.contact-section > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Menu specific styling - white backgrounds */
+.menu-section .menu-container,
+.menu-section .menu-item {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.08);
+}
+
+/* Reservations specific styling - white backgrounds */
+.reservations-section .reservation-form,
+.reservations-section .form-group,
+.reservations-section .form-control {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+.reservations-section .reservation-form {
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.18);
+}
+
+/* About specific styling - white backgrounds */
+.about-section .about-container,
+.about-section .about-content {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.08);
+}
+
+.about-section .story-section,
+.about-section .team-section {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.06);
+}
+
+/* Contact specific styling - white backgrounds */
+.contact-section .contact-container,
+.contact-section .contact-form {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.16);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+.contact-section .contact-info,
+.contact-section .form-group {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.08);
+}
+
+/* Remove default section backgrounds - let image classes handle this */
+
+/* Section Header Styling */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.1);
+}
+
+.section-header h2 {
+  font-size: 3rem;
+  color: #dc2626;
+  margin-bottom: 15px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(220, 38, 38, 0.1);
+}
+
+.section-header p {
+  font-size: 1.2rem;
+  color: #7f1d1d;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-indicator {
+    right: 15px;
+  }
+  
+  .nav-dots .dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .section-header p {
+    font-size: 1rem;
+  }
+  
+  .menu-section,
+  .reservations-section,
+  .about-section,
+  .contact-section {
+    min-height: auto;
+    padding: 60px 15px 30px;
+  }
+}
+
+/* Smooth Scroll Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-section > *,
+.reservations-section > *,
+.about-section > *,
+.contact-section > * {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Hero Section Update */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  /* Ensure background image from backgrounds.css is applied */
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-description {
+  font-size: 1.3rem;
+  margin-bottom: 40px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: white;
+  color: #dc2626;
+}
+
+.btn-primary:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: #dc2626;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.1rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary, .btn-secondary {
+    width: 200px;
+  }
+}
+
+/* Enhanced Navigation Dots with Red Theme */
+.nav-dots .dot:hover {
+  background: rgba(220, 38, 38, 0.6);
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.nav-dots .dot.active {
+  background: #dc2626;
+  transform: scale(1.3);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.nav-dots .dot::after {
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
