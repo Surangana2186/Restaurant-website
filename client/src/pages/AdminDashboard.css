@@ -1527,3 +1527,30 @@
 .view-btn:hover {
   background: #2563eb;
 }
+
+/* Loading State Styles */
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+
+.loading-state h3 {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.loading-state p {
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.no-items {
+  text-align: center;
+  padding: 1rem;
+  color: #999;
+  font-style: italic;
+}

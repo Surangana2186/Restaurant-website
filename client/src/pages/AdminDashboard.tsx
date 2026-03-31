@@ -615,137 +615,174 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
               </div>
             </div>
             
-            <div className="quick-stats">
-              <div className="stat-card">
-                <h3>📊 Order Statistics</h3>
-                <div className="stats-grid">
-                  <div className="stat-item">
-                    <span className="stat-number">{orders.filter(o => o.status === 'pending').length}</span>
-                    <span className="stat-label">Pending</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-number">{orders.filter(o => o.status === 'preparing').length}</span>
-                    <span className="stat-label">Preparing</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-number">{orders.filter(o => o.status === 'ready').length}</span>
-                    <span className="stat-label">Ready</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-number">{orders.filter(o => o.status === 'completed').length}</span>
-                    <span className="stat-label">Completed</span>
-                  </div>
-                </div>
+            {loading ? (
+              <div className="loading-state">
+                <h3>🔄 Loading Orders...</h3>
+                <p>Please wait while we fetch your order data.</p>
               </div>
-            </div>
-
-            <div className="orders-list">
-              {orders.length === 0 ? (
-                <div className="no-orders">
-                  <h3>🛒 No Orders Yet</h3>
-                  <p>When customers place orders, they will appear here for management.</p>
+            ) : (
+              <>
+                <div className="quick-stats">
+                  <div className="stat-card">
+                    <h3>📊 Order Statistics</h3>
+                    <div className="stats-grid">
+                      <div className="stat-item">
+                        <span className="stat-number">{orders.filter(o => o.status === 'pending').length}</span>
+                        <span className="stat-label">Pending</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-number">{orders.filter(o => o.status === 'preparing').length}</span>
+                        <span className="stat-label">Preparing</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-number">{orders.filter(o => o.status === 'ready').length}</span>
+                        <span className="stat-label">Ready</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-number">{orders.filter(o => o.status === 'completed').length}</span>
+                        <span className="stat-label">Completed</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                orders.map((order, index) => (
-                  <div key={order._id || index} className="order-card">
-                    <div className="order-header">
-                      <div className="order-info">
-                        <h3>Order #{order._id ? order._id.slice(-8) : index + 1}</h3>
-                        <span className={`status-badge status-${order.status}`}>
-                          {order.status}
-                        </span>
-                      </div>
-                      <div className="order-meta">
-                        <span className="order-date">
-                          {new Date(order.createdAt).toLocaleDateString()}
-                        </span>
-                        <span className="order-payment">
-                          {order.paymentMethod === 'cod' ? '💰 COD' : '💳 Online'}
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="order-customer">
-                      <h4>Customer Information</h4>
-                      <div className="customer-details">
-                        <div className="detail-item">
-                          <span className="detail-icon">👤</span>
-                          <span>{order.customerInfo?.name || 'Unknown'}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-icon">📧</span>
-                          <span>{order.customerInfo?.email || 'No email'}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-icon">📞</span>
-                          <span>{order.customerInfo?.phone || 'No phone'}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="order-items">
-                      <h4>Order Items ({order.items?.length || 0})</h4>
-                      <div className="items-list">
-                        {order.items?.map((item: any, itemIndex: number) => (
-                          <div key={itemIndex} className="order-item">
-                            <div className="item-info">
-                              <span className="item-name">{item.name}</span>
-                              <span className="item-quantity">x{item.quantity}</span>
-                            </div>
-                            <span className="item-price">₹{item.price * item.quantity}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="order-total">
-                      <div className="total-breakdown">
-                        <div className="total-row">
-                          <span>Subtotal:</span>
-                          <span>₹{order.items?.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) || 0}</span>
-                        </div>
-                        <div className="total-row">
-                          <span>Service Charge:</span>
-                          <span>₹5</span>
-                        </div>
-                        <div className="total-row">
-                          <span>Tax (5%):</span>
-                          <span>₹{((order.items?.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) || 0) * 0.05).toFixed(2)}</span>
-                        </div>
-                        <div className="total-row final-total">
-                          <span>Total:</span>
-                          <span>₹{order.totalAmount}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="order-actions">
-                      <div className="status-update">
-                        <select 
-                          className="status-select"
-                          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                          value={order.status}
-                        >
-                          <option value="pending">🟡 Pending</option>
-                          <option value="preparing">🔵 Preparing</option>
-                          <option value="ready">🟢 Ready</option>
-                          <option value="completed">✅ Completed</option>
-                        </select>
-                      </div>
-                      
+                <div className="orders-list">
+                  {orders.length === 0 ? (
+                    <div className="no-orders">
+                      <h3>🛒 No Orders Yet</h3>
+                      <p>When customers place orders, they will appear here for management.</p>
                       <button 
-                        className="action-btn view-btn"
-                        onClick={() => {
-                          alert(`Order Details:\n\nOrder ID: ${order._id}\nCustomer: ${order.customerInfo?.name}\nEmail: ${order.customerInfo?.email}\nPhone: ${order.customerInfo?.phone}\nStatus: ${order.status}\nPayment: ${order.paymentMethod}\nTotal: ₹${order.totalAmount}\nItems: ${order.items?.length || 0}`);
-                        }}
+                        className="refresh-btn"
+                        onClick={() => fetchDashboardData()}
                       >
-                        👁️ View
+                        🔄 Refresh Orders
                       </button>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
+                  ) : (
+                    orders.map((order, index) => (
+                      <div key={order._id || index} className="order-card">
+                        <div className="order-header">
+                          <div className="order-info">
+                            <h3>Order #{order._id ? order._id.slice(-8) : index + 1}</h3>
+                            <span className={`status-badge status-${order.status}`}>
+                              {order.status}
+                            </span>
+                          </div>
+                          <div className="order-meta">
+                            <span className="order-date">
+                              {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Unknown date'}
+                            </span>
+                            <span className="order-payment">
+                              {order.paymentMethod === 'cod' ? '💰 COD' : '💳 Online'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="order-customer">
+                          <h4>Customer Information</h4>
+                          <div className="customer-details">
+                            <div className="detail-item">
+                              <span className="detail-icon">👤</span>
+                              <span>{order.customerInfo?.name || 'Unknown Customer'}</span>
+                            </div>
+                            <div className="detail-item">
+                              <span className="detail-icon">📧</span>
+                              <span>{order.customerInfo?.email || 'No email provided'}</span>
+                            </div>
+                            <div className="detail-item">
+                              <span className="detail-icon">📞</span>
+                              <span>{order.customerInfo?.phone || 'No phone provided'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="order-items">
+                          <h4>Order Items ({order.items?.length || 0})</h4>
+                          <div className="items-list">
+                            {order.items && order.items.length > 0 ? (
+                              order.items.map((item: any, itemIndex: number) => (
+                                <div key={itemIndex} className="order-item">
+                                  <div className="item-info">
+                                    <span className="item-name">{item.name || 'Unknown Item'}</span>
+                                    <span className="item-quantity">x{item.quantity || 1}</span>
+                                  </div>
+                                  <span className="item-price">₹{(item.price || 0) * (item.quantity || 1)}</span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="no-items">
+                                <p>No items found in this order</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="order-total">
+                          <div className="total-breakdown">
+                            <div className="total-row">
+                              <span>Subtotal:</span>
+                              <span>₹{order.items?.reduce((sum: number, item: any) => sum + ((item.price || 0) * (item.quantity || 1)), 0) || 0}</span>
+                            </div>
+                            <div className="total-row">
+                              <span>Service Charge:</span>
+                              <span>₹5</span>
+                            </div>
+                            <div className="total-row">
+                              <span>Tax (5%):</span>
+                              <span>₹{((order.items?.reduce((sum: number, item: any) => sum + ((item.price || 0) * (item.quantity || 1)), 0) || 0) * 0.05).toFixed(2)}</span>
+                            </div>
+                            <div className="total-row final-total">
+                              <span>Total:</span>
+                              <span>₹{order.totalAmount || 'N/A'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="order-actions">
+                          <div className="status-update">
+                            <select 
+                              className="status-select"
+                              onChange={(e) => {
+                                console.log('🔄 Updating order status:', order._id, 'to:', e.target.value);
+                                updateOrderStatus(order._id, e.target.value);
+                              }}
+                              value={order.status || 'pending'}
+                            >
+                              <option value="pending">🟡 Pending</option>
+                              <option value="preparing">🔵 Preparing</option>
+                              <option value="ready">🟢 Ready</option>
+                              <option value="completed">✅ Completed</option>
+                            </select>
+                          </div>
+                          
+                          <button 
+                            className="action-btn view-btn"
+                            onClick={() => {
+                              const orderDetails = `
+Order Details:
+
+Order ID: ${order._id || 'N/A'}
+Customer: ${order.customerInfo?.name || 'Unknown'}
+Email: ${order.customerInfo?.email || 'N/A'}
+Phone: ${order.customerInfo?.phone || 'N/A'}
+Status: ${order.status || 'N/A'}
+Payment: ${order.paymentMethod || 'N/A'}
+Total: ₹${order.totalAmount || 'N/A'}
+Items: ${order.items?.length || 0}
+Date: ${order.createdAt ? new Date(order.createdAt).toLocaleString() : 'N/A'}
+                              `;
+                              alert(orderDetails);
+                            }}
+                          >
+                            👁️ View
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </>
+            )}
           </div>
         );
       case 'menu':
