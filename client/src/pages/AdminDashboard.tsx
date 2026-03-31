@@ -737,32 +737,68 @@ const AdminDashboard = () => {
                   <p className="no-reservations">No reservations yet</p>
                 ) : (
                   reservations.map((reservation, index) => (
-                    <div key={index} className="reservation-item">
-                      <div className="reservation-info">
+                    <div key={index} className={`reservation-card ${reservation.status !== 'pending' ? 'processed' : ''}`}>
+                      <div className="reservation-header">
                         <h3>{reservation.name}</h3>
-                        <p>📧 {reservation.email}</p>
-                        <p>📞 {reservation.phone}</p>
-                        <p>📅 {reservation.date} at {reservation.time}</p>
-                        <p>👥 {reservation.guests} guests</p>
-                        <p>📝 {reservation.specialRequests || 'No special requests'}</p>
+                        <div className="header-right">
+                          {reservation.status !== 'pending' && (
+                            <span className="processed-indicator">✅ Processed</span>
+                          )}
+                          <span className={`status-badge status-${reservation.status}`}>
+                            {reservation.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="reservation-details">
+                        <div className="detail-item">
+                          <span className="detail-icon">📧</span>
+                          <span>{reservation.email}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">📞</span>
+                          <span>{reservation.phone}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">📅</span>
+                          <span>{new Date(reservation.date).toLocaleDateString()}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">🕐</span>
+                          <span>{reservation.time}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">👥</span>
+                          <span>{reservation.guests} {reservation.guests === 1 ? 'Guest' : 'Guests'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">�</span>
+                          <span>{reservation.specialRequests || 'No special requests'}</span>
+                        </div>
                       </div>
                       <div className="reservation-actions">
-                        <select 
-                          className={`status-btn ${reservation.status}`}
-                          onChange={(e) => handleUpdateReservationStatus(reservation._id, e.target.value)}
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
+                        {reservation.status === 'pending' && (
+                          <div className="status-update">
+                            <select 
+                              className="status-select"
+                              onChange={(e) => handleUpdateReservationStatus(reservation._id, e.target.value)}
+                              defaultValue=""
+                            >
+                              <option value="" disabled>Select Action</option>
+                              <option value="confirmed">Confirm</option>
+                              <option value="cancelled">Cancel</option>
+                            </select>
+                          </div>
+                        )}
+                        
                         <button 
-                          className="edit-reservation-btn" 
-                          onClick={() => handleEditReservation(reservation)}
+                          className="action-btn view-btn"
+                          onClick={() => handleViewReservation(reservation)}
                         >
-                          Edit
+                          View
                         </button>
+                        
                         <button 
-                          className="delete-reservation-btn" 
+                          className="action-btn delete-btn"
                           onClick={() => handleDeleteReservation(reservation._id)}
                         >
                           Delete

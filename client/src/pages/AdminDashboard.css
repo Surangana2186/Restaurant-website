@@ -1270,3 +1270,33 @@
   color: #666;
   font-style: italic;
 }
+
+/* Processed Reservation Styles */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.processed-indicator {
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.reservation-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.reservation-card.processed {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
