@@ -83,7 +83,7 @@ git push -u origin master
 
 Your project is now ready for:
 - ✅ GitHub upload
-- ✅ Vercel/Netlify deployment (frontend)
+- ✅ Vercel deployment (frontend)
 - ✅ Heroku/Railway deployment (backend)
 - ✅ Portfolio showcase
 
