@@ -194,23 +194,39 @@ const AdminDashboard = () => {
 
   const fetchReservations = async () => {
     try {
-      // Add timestamp to prevent caching
+      console.log('🔄 Fetching fresh reservations data...');
+      
+      // Add timestamp and random number to prevent any caching
       const timestamp = new Date().getTime();
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations?t=${timestamp}`, {
+      const random = Math.random();
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations?t=${timestamp}&r=${random}`, {
         cache: 'no-cache',
         headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       });
+      
+      console.log('📡 Response status:', response.status);
+      
       if (!response.ok) {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
+      
       const reservationsData = await response.json();
-      console.log('📋 Fetched reservations from server:', reservationsData.map((r: any) => ({ id: r._id, name: r.name, status: r.status })));
+      console.log('📋 Raw data from server:', reservationsData);
+      console.log('📋 Processed reservations:', reservationsData.map((r: any) => ({ 
+        id: r._id, 
+        name: r.name, 
+        status: r.status,
+        email: r.email
+      })));
+      
       setReservations(reservationsData || []);
+      console.log('✅ Reservations state updated');
     } catch (error) {
-      console.error('Error fetching reservations:', error);
+      console.error('❌ Error fetching reservations:', error);
       setReservations([]);
     }
   };
