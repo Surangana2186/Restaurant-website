@@ -102,21 +102,23 @@ router.put('/:id/status', async (req, res) => {
 
     // Send confirmation email when status changes to 'confirmed'
     if (status === 'confirmed') {
+      console.log('📧 Sending confirmation email to:', reservation.email);
       const emailSent = await sendReservationConfirmation(reservation);
       if (emailSent) {
-        console.log('✅ Confirmation email sent successfully');
+        console.log('✅ Confirmation email sent successfully to:', reservation.email);
       } else {
-        console.log('⚠️ Failed to send confirmation email');
+        console.log('⚠️ Failed to send confirmation email to:', reservation.email);
       }
     }
 
     // Send cancellation email when status changes to 'cancelled'
     if (status === 'cancelled') {
+      console.log('📧 Sending cancellation email to:', reservation.email);
       const emailSent = await sendReservationCancellation(reservation);
       if (emailSent) {
-        console.log('✅ Cancellation email sent successfully');
+        console.log('✅ Cancellation email sent successfully to:', reservation.email);
       } else {
-        console.log('⚠️ Failed to send cancellation email');
+        console.log('⚠️ Failed to send cancellation email to:', reservation.email);
       }
     }
 
