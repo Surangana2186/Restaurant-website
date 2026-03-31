@@ -19,6 +19,7 @@ const Login: React.FC = () => {
     setLoading(true);
     
     try {
+      console.log('Attempting login with:', { email, isAdminLogin });
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/auth/login`, {
         method: 'POST',
         headers: {
@@ -28,6 +29,8 @@ const Login: React.FC = () => {
       });
 
       const result = await response.json();
+      console.log('Login response:', result);
+      console.log('Response status:', response.status);
 
       if (response.ok && result.success) {
         console.log('Login successful:', result);
