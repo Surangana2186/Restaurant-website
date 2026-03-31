@@ -110,23 +110,43 @@ router.put('/:id/status', async (req, res) => {
 
     // Send confirmation email when status changes to 'confirmed'
     if (status === 'confirmed') {
-      console.log('📧 Sending confirmation email to:', reservation.email);
-      const emailSent = await sendReservationConfirmation(reservation);
-      if (emailSent) {
-        console.log('✅ Confirmation email sent successfully to:', reservation.email);
-      } else {
-        console.log('⚠️ Failed to send confirmation email to:', reservation.email);
+      console.log('📧 SENDING CONFIRMATION EMAIL');
+      console.log('📧 To:', reservation.email);
+      console.log('📧 Reservation ID:', reservation._id);
+      console.log('📧 Name:', reservation.name);
+      console.log('📧 Date:', reservation.date);
+      console.log('📧 Time:', reservation.time);
+      
+      try {
+        const emailSent = await sendReservationConfirmation(reservation);
+        if (emailSent) {
+          console.log('✅ Confirmation email sent successfully to:', reservation.email);
+        } else {
+          console.log('❌ Failed to send confirmation email to:', reservation.email);
+        }
+      } catch (emailError) {
+        console.error('❌ ERROR sending confirmation email:', emailError);
       }
     }
 
     // Send cancellation email when status changes to 'cancelled'
     if (status === 'cancelled') {
-      console.log('📧 Sending cancellation email to:', reservation.email);
-      const emailSent = await sendReservationCancellation(reservation);
-      if (emailSent) {
-        console.log('✅ Cancellation email sent successfully to:', reservation.email);
-      } else {
-        console.log('⚠️ Failed to send cancellation email to:', reservation.email);
+      console.log('📧 SENDING CANCELLATION EMAIL');
+      console.log('📧 To:', reservation.email);
+      console.log('📧 Reservation ID:', reservation._id);
+      console.log('📧 Name:', reservation.name);
+      console.log('📧 Date:', reservation.date);
+      console.log('📧 Time:', reservation.time);
+      
+      try {
+        const emailSent = await sendReservationCancellation(reservation);
+        if (emailSent) {
+          console.log('✅ Cancellation email sent successfully to:', reservation.email);
+        } else {
+          console.log('❌ Failed to send cancellation email to:', reservation.email);
+        }
+      } catch (emailError) {
+        console.error('❌ ERROR sending cancellation email:', emailError);
       }
     }
 
