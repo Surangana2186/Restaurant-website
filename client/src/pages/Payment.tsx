@@ -48,7 +48,7 @@ const Payment: React.FC = () => {
 
   const calculateFinalAmount = () => {
     const subtotal = total;
-    const serviceCharge = 50; // Table service charge
+    const serviceCharge = 5; // Table service charge
     const tax = subtotal * 0.05;
     return subtotal + serviceCharge + tax;
   };
@@ -193,7 +193,7 @@ const Payment: React.FC = () => {
             </div>
             <div className="total-row">
               <span>Service Charge:</span>
-              <span>₹50</span>
+              <span>₹5</span>
             </div>
             <div className="total-row">
               <span>Tax (5%):</span>
