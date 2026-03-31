@@ -30,10 +30,18 @@ router.get('/', async (req, res) => {
       .sort(sort)
       .lean();
     
+    // Fix image URLs to include full backend URL
+    const menuItemsWithFullUrls = menuItems.map(item => ({
+      ...item,
+      image: item.image.startsWith('http') 
+        ? item.image 
+        : `${req.protocol}://${req.get('host')}${item.image}`
+    }));
+    
     res.json({
       success: true,
-      count: menuItems.length,
-      menuItems
+      count: menuItemsWithFullUrls.length,
+      menuItems: menuItemsWithFullUrls
     });
   } catch (error) {
     console.error('Error fetching menu items:', error);

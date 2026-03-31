@@ -35,7 +35,14 @@ const Menu: React.FC = () => {
       const data = await response.json();
       
       if (data.success && data.menuItems) {
-        setMenuItems(data.menuItems);
+        // Fix image URLs to use full backend URL
+        const menuItemsWithFullUrls = data.menuItems.map((item: any) => ({
+          ...item,
+          image: item.image.startsWith('http') 
+            ? item.image 
+            : `https://restaurant-website-jy83.onrender.com${item.image}`
+        }));
+        setMenuItems(menuItemsWithFullUrls);
       } else {
         console.error('Failed to fetch menu items:', data.message);
         // Fallback to sample data if API fails
