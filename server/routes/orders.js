@@ -4,6 +4,81 @@ const Order = require('../models/Order');
 const User = require('../models/User');
 const { sendOrderConfirmation, sendOrderStatusNotification } = require('../services/emailService');
 
+// Create COD order (for payment page)
+router.post('/cod', async (req, res) => {
+  try {
+    const { customer_info, order_details, payment_method } = req.body;
+
+    console.log('COD Order Request:', { customer_info, order_details, payment_method });
+
+    // Validate required fields
+    if (!customer_info.name || !customer_info.email || !order_details.items || order_details.items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields'
+      });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ email: customer_info.email });
+    
+    if (!user) {
+      // Create a user for COD orders
+      user = new User({
+        name: customer_info.name,
+        email: customer_info.email,
+        password: 'temp123', // Temporary password
+        phone: customer_info.phone || '0000000000',
+        role: 'user'
+      });
+      
+      await user.save();
+      console.log('Created new user for COD order:', user.email);
+    }
+
+    // Create COD order
+    const order = new Order({
+      user: user._id,
+      items: order_details.items,
+      totalAmount: order_details.total,
+      status: 'confirmed', // COD orders are confirmed immediately
+      paymentStatus: 'pending', // Payment pending (cash on delivery)
+      paymentMethod: payment_method || 'cod',
+      customerInfo: {
+        name: customer_info.name,
+        email: customer_info.email,
+        phone: customer_info.phone || '0000000000'
+      },
+      orderType: 'delivery'
+    });
+
+    await order.save();
+    console.log('COD Order created:', order._id);
+
+    // Send order confirmation email
+    try {
+      await sendOrderConfirmation(order);
+      console.log('Order confirmation email sent');
+    } catch (emailError) {
+      console.error('Failed to send order confirmation email:', emailError);
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'COD order created successfully',
+      order: order
+    });
+
+  } catch (error) {
+    console.error('Error creating COD order:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error creating COD order',
+      error: error.message
+    });
+  }
+});
+
 // Create new order (for COD orders)
 router.post('/create', async (req, res) => {
   try {

@@ -13,6 +13,7 @@ const Payment: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'cod'>('razorpay');
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     email: '',
@@ -50,6 +51,49 @@ const Payment: React.FC = () => {
     const serviceCharge = 50; // Table service charge
     const tax = subtotal * 0.05;
     return subtotal + serviceCharge + tax;
+  };
+
+  const handleCODPayment = async () => {
+    if (!customerInfo.name || !customerInfo.email || !customerInfo.phone) {
+      alert('Please fill in all customer details');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Create COD order
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/cod`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer_info: customerInfo,
+          order_details: { items: cartItems, total: calculateFinalAmount() },
+          payment_method: 'cod'
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('COD Order successful:', result);
+        alert('Order placed successfully! You will pay cash on delivery.');
+        
+        // Clear cart
+        localStorage.removeItem('cart');
+        // Redirect to success page
+        history.push('/payment-success');
+      } else {
+        alert('Failed to place order. Please try again.');
+      }
+    } catch (error) {
+      console.error('COD Order error:', error);
+      alert('Failed to place order. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePayment = async () => {
@@ -162,9 +206,51 @@ const Payment: React.FC = () => {
           </div>
         </div>
 
+        <div className="payment-method-selection">
+          <h2>Payment Method</h2>
+          <div className="payment-options">
+            <label className="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="razorpay"
+                checked={paymentMethod === 'razorpay'}
+                onChange={(e) => setPaymentMethod(e.target.value as 'razorpay' | 'cod')}
+              />
+              <span className="option-icon">💳</span>
+              <div className="option-details">
+                <span className="option-title">Online Payment</span>
+                <span className="option-desc">Pay securely with Razorpay</span>
+              </div>
+            </label>
+            
+            <label className="payment-option">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cod"
+                checked={paymentMethod === 'cod'}
+                onChange={(e) => setPaymentMethod(e.target.value as 'razorpay' | 'cod')}
+              />
+              <span className="option-icon">💵</span>
+              <div className="option-details">
+                <span className="option-title">Cash on Delivery</span>
+                <span className="option-desc">Pay when your order arrives</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <div className="customer-details">
           <h2>Customer Information</h2>
-          <form onSubmit={(e) => { e.preventDefault(); handlePayment(); }}>
+          <form onSubmit={(e) => { 
+          e.preventDefault(); 
+          if (paymentMethod === 'cod') {
+            handleCODPayment();
+          } else {
+            handlePayment();
+          }
+        }}>
             <div className="form-group">
               <label>Full Name</label>
               <input
@@ -199,7 +285,7 @@ const Payment: React.FC = () => {
               />
             </div>
             <button type="submit" className="pay-btn" disabled={loading}>
-              {loading ? 'Processing...' : `Pay ₹${calculateFinalAmount()}`}
+              {loading ? 'Processing...' : paymentMethod === 'cod' ? `Place Order (₹${calculateFinalAmount()})` : `Pay ₹${calculateFinalAmount()}`}
             </button>
           </form>
         </div>
