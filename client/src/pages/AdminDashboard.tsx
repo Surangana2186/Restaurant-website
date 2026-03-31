@@ -346,7 +346,10 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
         order.id === orderId ? { ...order, status: newStatus } : order
       ));
     }
-  };
+  } catch (error) {
+    console.error('Error updating order status:', error);
+  }
+};
 
   // Menu Management Functions
   const handleAddItem = () => {
