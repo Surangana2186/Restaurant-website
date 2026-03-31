@@ -108,6 +108,20 @@ const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    console.log('Form data:', formData);
+    
+    // Validate form before submission
+    const isValid = validateForm();
+    console.log('Form validation result:', isValid);
+    console.log('Current errors:', errors);
+    
+    if (!isValid) {
+      console.log('Validation failed, not submitting');
+      return; // Don't submit if validation fails
+    }
+    
+    console.log('Validation passed, submitting...');
     setLoading(true);
     
     try {
@@ -246,7 +260,14 @@ const Signup: React.FC = () => {
               {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
             </div>
             
-            <button type="submit" className="signup-btn-primary" disabled={loading}>
+            <button 
+              type="submit" 
+              className="signup-btn-primary" 
+              disabled={loading}
+              onClick={(e) => {
+                console.log('Signup button clicked!');
+              }}
+            >
               {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </form>
