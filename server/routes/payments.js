@@ -4,24 +4,36 @@ const { sendOrderConfirmation } = require('../services/emailService');
 const User = require('../models/User');
 const Order = require('../models/Order');
 
-// Mock payment verification (replace with actual Razorpay verification)
+// Payment verification with Razorpay
 router.post('/verify', async (req, res) => {
   try {
     const { payment_id, amount, customer_info, order_details } = req.body;
 
-    // In production, you would verify the payment with Razorpay API
-    // const crypto = require('crypto');
-    // const razorpay_signature = req.headers['x-razorpay-signature'];
-    // const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-    //   .update(`${payment_id}|${order_id}`)
-    //   .digest('hex');
+    // Verify payment with Razorpay API
+    const crypto = require('crypto');
+    const razorpay = require('razorpay');
     
-    // if (generated_signature !== razorpay_signature) {
-    //   return res.status(400).json({ success: false, message: 'Invalid signature' });
-    // }
+    const razorpayInstance = new razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET
+    });
 
-    // For now, we'll simulate successful verification
-    console.log('Payment verified:', {
+    // Fetch payment details from Razorpay
+    const payment = await razorpayInstance.payments.fetch(payment_id);
+    
+    if (!payment) {
+      return res.status(400).json({ success: false, message: 'Payment not found' });
+    }
+
+    if (payment.status !== 'captured') {
+      return res.status(400).json({ success: false, message: 'Payment not successful' });
+    }
+
+    if (payment.amount !== amount) {
+      return res.status(400).json({ success: false, message: 'Payment amount mismatch' });
+    }
+
+    console.log('Payment verified successfully:', {
       payment_id,
       amount,
       customer_info,

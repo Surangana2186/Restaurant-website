@@ -64,27 +64,25 @@ const Payment: React.FC = () => {
       await loadRazorpayScript();
 
       const options = {
-        key: 'rzp_test_263lMbHqG0i3U', // Updated with your Razorpay key
+        key: 'rzp_live_SXwULl4VkmKLMB', // Your live Razorpay key
         amount: calculateFinalAmount() * 100, // Convert to paise
         currency: 'INR',
         name: 'Dine n Delight',
         description: 'Food Order Payment',
-        image: 'http://localhost:3000/logo.png', // Use http for development
-        callback_url: 'http://localhost:3000/payment-success', // Add callback URL
-        redirect: true, // Enable redirect
+        image: 'https://restaurant-website-pea7.vercel.app/logo.png', // Live logo URL
         prefill: {
           name: customerInfo.name,
           email: customerInfo.email,
           contact: customerInfo.phone
         },
         theme: {
-          color: '#e74c3c' // Match your restaurant theme
+          color: '#dc2626' // Match your restaurant theme
         },
         handler: function (response: any) {
           alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
           
           // Send payment details to backend for verification
-          fetch('http://localhost:5000/api/payments/verify', {
+          fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/payments/verify`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
