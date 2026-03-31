@@ -207,7 +207,7 @@ const AdminDashboard = () => {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
       const reservationsData = await response.json();
-      console.log('📋 Fetched reservations from server:', reservationsData.map(r => ({ id: r._id, name: r.name, status: r.status })));
+      console.log('📋 Fetched reservations from server:', reservationsData.map((r: any) => ({ id: r._id, name: r.name, status: r.status })));
       setReservations(reservationsData || []);
     } catch (error) {
       console.error('Error fetching reservations:', error);
