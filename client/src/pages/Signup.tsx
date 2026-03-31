@@ -80,7 +80,17 @@ const Signup: React.FC = () => {
     } else {
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        newErrors.password = `Password must be at least 6 characters and include uppercase, lowercase, and numbers`;
+        let errorMsg = 'Password must be at least 6 characters';
+        if (!passwordValidation.requirements.hasUpperCase) {
+          errorMsg += ' and include uppercase letter';
+        }
+        if (!passwordValidation.requirements.hasLowerCase) {
+          errorMsg += ' and include lowercase letter';
+        }
+        if (!passwordValidation.requirements.hasNumbers) {
+          errorMsg += ' and include number';
+        }
+        newErrors.password = errorMsg;
       }
     }
 
@@ -111,6 +121,9 @@ const Signup: React.FC = () => {
 
       const result = await response.json();
 
+      console.log('Signup response:', result);
+      console.log('Response status:', response.status);
+
       if (response.ok && result.success) {
         console.log('Registration successful:', result);
         
@@ -123,6 +136,7 @@ const Signup: React.FC = () => {
         // Redirect to home page
         history.push('/');
       } else {
+        console.error('Registration failed:', result);
         setError(result.message || 'Registration failed');
       }
     } catch (error) {
