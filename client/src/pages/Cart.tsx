@@ -104,9 +104,9 @@ const Cart = () => {
       customerEmail: customerEmail.trim(),
       items: cartItems,
       subtotal: total,
-      serviceCharge: 50,
+      serviceCharge: 5,
       tax: total * 0.05,
-      totalAmount: total + 50 + (total * 0.05),
+      totalAmount: total + 5 + (total * 0.05),
       paymentMethod: paymentMethod,
       paymentStatus: paymentMethod === 'online' ? 'pending' : 'cod',
       status: 'pending'
@@ -331,7 +331,7 @@ const Cart = () => {
               </div>
               <div className="summary-row">
                 <span>Table Service Charge:</span>
-                <span>₹50.00</span>
+                <span>₹5.00</span>
               </div>
               <div className="summary-row">
                 <span>Tax (GST 5%):</span>
@@ -339,7 +339,7 @@ const Cart = () => {
               </div>
               <div className="summary-row total">
                 <span>Total:</span>
-                <span>₹{(total + 50 + (total * 0.05)).toFixed(2)}</span>
+                <span>₹{(total + 5 + (total * 0.05)).toFixed(2)}</span>
               </div>
               <button 
                 onClick={clearCart}
