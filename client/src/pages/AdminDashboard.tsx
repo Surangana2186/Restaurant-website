@@ -231,6 +231,73 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchDashboardData = async () => {
+    try {
+      console.log('🔄 Fetching dashboard data...');
+      
+      // Add cache-busting to orders fetch
+      const timestamp = new Date().getTime();
+      const [statsResponse, ordersResponse] = await Promise.all([
+        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/stats`),
+        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all?t=${timestamp}`, {
+          cache: 'no-cache',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          }
+        })
+      ]);
+
+      console.log('📊 Stats response:', statsResponse.status);
+      console.log('🛒 Orders response:', ordersResponse.status);
+
+      if (!statsResponse.ok) {
+        console.log('⚠️ Stats fetch failed, using fallback');
+      }
+      
+      if (!ordersResponse.ok) {
+        throw new Error(`Orders fetch failed: ${ordersResponse.status}`);
+      }
+
+      const ordersData = await ordersResponse.json();
+      console.log('🛒 Orders data:', ordersData);
+      console.log('🛒 Orders count:', ordersData.orders?.length || 0);
+
+      // Store orders in state
+      if (ordersData.success && ordersData.orders) {
+        console.log('✅ Setting orders state with', ordersData.orders.length, 'orders');
+        console.log('🛒 Order details:', ordersData.orders.map((o: any) => ({ 
+          id: o._id, 
+          customer: o.customerInfo?.name, 
+          status: o.status,
+          amount: o.totalAmount,
+          payment: o.paymentMethod
+        })));
+        setOrders(ordersData.orders);
+      } else {
+        console.log('❌ Orders data structure issue:', ordersData);
+        setOrders([]);
+      }
+
+      // Update stats with real order count
+      setStats(prevStats => [
+        { ...prevStats[0] },
+        { ...prevStats[1] },
+        { ...prevStats[2] },
+        { 
+          title: 'Total Orders', 
+          value: (ordersData.success ? ordersData.orders.length : 0).toLocaleString(), 
+          icon: '🛒' 
+        }
+      ]);
+
+    } catch (error) {
+      console.error('❌ Error fetching dashboard data:', error);
+      setOrders([]);
+    }
+  };
+
   const fetchMenuItems = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/menu`);
@@ -243,60 +310,40 @@ const AdminDashboard = () => {
       console.error('Error fetching menu items:', error);
       setMenuItems([]);
     }
-  };
 
-  const fetchDashboardData = async () => {
-    try {
-      console.log('Fetching dashboard data...');
-      const [statsResponse, ordersResponse] = await Promise.all([
-        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/stats`),
-        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all`)
-      ]);
+    setStats([
+      { title: 'Total Users', value: realStats.totalUsers.toLocaleString(), icon: '👥' },
+      { title: 'Reservations', value: realStats.totalReservations.toLocaleString(), icon: '📅' },
+      { title: 'Menu Items', value: realStats.totalMenuItems.toLocaleString(), icon: '🍽️' },
+      { title: 'Total Orders', value: realStats.totalOrders.toLocaleString(), icon: '🛒' }
+    ]);
 
-      console.log('Stats response:', statsResponse.status);
-      console.log('Orders response:', ordersResponse.status);
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    // Set fallback values
+    setStats([
+      { title: 'Total Users', value: registeredUsers.length.toLocaleString(), icon: '👥' },
+      { title: 'Reservations', value: reservations.length.toLocaleString(), icon: '📅' },
+      { title: 'Menu Items', value: menuItems.length.toLocaleString(), icon: '🍽️' },
+      { title: 'Total Orders', value: '0', icon: '🛒' }
+    ]);
+  }
+};
 
-      if (!statsResponse.ok) {
-        throw new Error(`Stats fetch failed: ${statsResponse.status}`);
-      }
-      if (!ordersResponse.ok) {
-        throw new Error(`Orders fetch failed: ${ordersResponse.status}`);
-      }
+const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/orders/${orderId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: newStatus }),
+    });
 
-      const statsData = await statsResponse.json();
-      const ordersData = await ordersResponse.json();
-
-      console.log('Stats data:', statsData);
-      console.log('Orders data:', ordersData);
-
-      // Store orders in state
-      if (ordersData.success && ordersData.orders) {
-        setOrders(ordersData.orders);
-      }
-
-      // Set real-time stats based on actual database data
-      const realStats = statsData.success && statsData.stats ? statsData.stats : {
-        totalUsers: registeredUsers.length,
-        totalOrders: ordersData.success ? ordersData.orders.length : 0,
-        totalReservations: reservations.length,
-        totalMenuItems: menuItems.length
-      };
-
-      setStats([
-        { title: 'Total Users', value: realStats.totalUsers.toLocaleString(), icon: '👥' },
-        { title: 'Reservations', value: realStats.totalReservations.toLocaleString(), icon: '📅' },
-        { title: 'Menu Items', value: realStats.totalMenuItems.toLocaleString(), icon: '🍽️' },
-        { title: 'Total Orders', value: realStats.totalOrders.toLocaleString(), icon: '🛒' }
-      ]);
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      // Set fallback values
-      setStats([
-        { title: 'Total Users', value: registeredUsers.length.toLocaleString(), icon: '👥' },
-        { title: 'Reservations', value: reservations.length.toLocaleString(), icon: '📅' },
-        { title: 'Menu Items', value: menuItems.length.toLocaleString(), icon: '🍽️' },
-        { title: 'Total Orders', value: '0', icon: '🛒' }
+    if (response.ok) {
+      setOrders(orders.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
       ]);
     }
   };
