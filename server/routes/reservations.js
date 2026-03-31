@@ -99,6 +99,14 @@ router.put('/:id/status', async (req, res) => {
     }
 
     console.log(`✅ Successfully updated reservation ${id} status to:`, status);
+    console.log('📋 Updated reservation data:', {
+      id: reservation._id,
+      name: reservation.name,
+      email: reservation.email,
+      status: reservation.status,
+      date: reservation.date,
+      time: reservation.time
+    });
 
     // Send confirmation email when status changes to 'confirmed'
     if (status === 'confirmed') {

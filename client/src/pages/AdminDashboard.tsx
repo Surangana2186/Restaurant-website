@@ -194,11 +194,20 @@ const AdminDashboard = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations`);
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations?t=${timestamp}`, {
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       if (!response.ok) {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
       const reservationsData = await response.json();
+      console.log('📋 Fetched reservations from server:', reservationsData.map(r => ({ id: r._id, name: r.name, status: r.status })));
       setReservations(reservationsData || []);
     } catch (error) {
       console.error('Error fetching reservations:', error);
@@ -693,10 +702,13 @@ const AdminDashboard = () => {
               <div className="header-actions">
                 <button 
                   className="refresh-btn" 
-                  onClick={() => fetchReservations()}
+                  onClick={() => {
+                    console.log('🔄 Force refreshing reservations...');
+                    fetchReservations();
+                  }}
                   disabled={loading}
                 >
-                  🔄 Refresh
+                  🔄 Force Refresh
                 </button>
                 <span className="last-updated">
                   Last updated: {new Date().toLocaleTimeString()}
