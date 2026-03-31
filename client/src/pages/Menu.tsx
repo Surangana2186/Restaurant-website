@@ -31,7 +31,7 @@ const Menu: React.FC = () => {
   const fetchMenuItems = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/menu');
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/menu`);
       const data = await response.json();
       
       if (data.success && data.menuItems) {
