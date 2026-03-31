@@ -199,26 +199,7 @@ const AdminDashboard = () => {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
       const reservationsData = await response.json();
-      
-      // Merge with existing reservations to preserve recent updates
-      setReservations(prevReservations => {
-        const existingMap = new Map(prevReservations.map((r: any) => [r._id, r]));
-        const serverMap = new Map(reservationsData.map((r: any) => [r._id, r]));
-        
-        // Keep local version if it was updated more recently
-        const merged = Array.from(serverMap.values()).map((serverReservation: any) => {
-          const localReservation = existingMap.get(serverReservation._id);
-          if (localReservation && localReservation.lastUpdated) {
-            // Keep local version if it was updated recently
-            return localReservation.lastUpdated > (serverReservation.lastUpdated || 0) 
-              ? localReservation 
-              : serverReservation;
-          }
-          return serverReservation;
-        });
-        
-        return merged;
-      });
+      setReservations(reservationsData || []);
     } catch (error) {
       console.error('Error fetching reservations:', error);
       setReservations([]);
@@ -471,19 +452,19 @@ const AdminDashboard = () => {
         const result = await response.json();
         console.log('Update response:', result);
         
-        // Update local state immediately for better UX
+        // Update local state immediately
         setReservations(prevReservations => 
           prevReservations.map(reservation => 
             reservation._id === reservationId 
-              ? { ...reservation, status: newStatus, lastUpdated: Date.now() }
+              ? { ...reservation, status: newStatus }
               : reservation
           )
         );
         
-        // Also refresh data from server to ensure consistency
+        // Refresh data from server after a short delay to ensure consistency
         setTimeout(() => {
           fetchReservations();
-        }, 2000); // Wait 2 seconds before refreshing
+        }, 1000); // Wait 1 second before refreshing
         
         alert(`Reservation status updated to ${newStatus}`);
       } else {
@@ -707,7 +688,21 @@ const AdminDashboard = () => {
       case 'reservations':
         return (
           <div className="tab-content">
-            <h2>Reservation Management</h2>
+            <div className="reservations-header">
+              <h2>Reservation Management</h2>
+              <div className="header-actions">
+                <button 
+                  className="refresh-btn" 
+                  onClick={() => fetchReservations()}
+                  disabled={loading}
+                >
+                  🔄 Refresh
+                </button>
+                <span className="last-updated">
+                  Last updated: {new Date().toLocaleTimeString()}
+                </span>
+              </div>
+            </div>
             <p>Manage table reservations and bookings</p>
             <div className="reservations-management">
               <div className="reservation-filters">

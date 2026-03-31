@@ -1224,3 +1224,49 @@
   font-weight: 500;
   text-transform: capitalize;
 }
+
+/* Refresh Button Styles */
+.reservations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+}
+
+.reservations-header h2 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.refresh-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.last-updated {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+}
