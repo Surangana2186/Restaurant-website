@@ -329,25 +329,7 @@ const AdminDashboard = () => {
       console.error('Error fetching menu items:', error);
       setMenuItems([]);
     }
-
-    setStats([
-      { title: 'Total Users', value: realStats.totalUsers.toLocaleString(), icon: '👥' },
-      { title: 'Reservations', value: realStats.totalReservations.toLocaleString(), icon: '📅' },
-      { title: 'Menu Items', value: realStats.totalMenuItems.toLocaleString(), icon: '🍽️' },
-      { title: 'Total Orders', value: realStats.totalOrders.toLocaleString(), icon: '🛒' }
-    ]);
-
-  } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    // Set fallback values
-    setStats([
-      { title: 'Total Users', value: registeredUsers.length.toLocaleString(), icon: '👥' },
-      { title: 'Reservations', value: reservations.length.toLocaleString(), icon: '📅' },
-      { title: 'Menu Items', value: menuItems.length.toLocaleString(), icon: '🍽️' },
-      { title: 'Total Orders', value: '0', icon: '🛒' }
-    ]);
-  }
-};
+  };
 
 const updateOrderStatus = async (orderId: string, newStatus: string) => {
   try {
@@ -363,27 +345,6 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
       setOrders(orders.map(order => 
         order.id === orderId ? { ...order, status: newStatus } : order
       ));
-      ]);
-    }
-  };
-
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/orders/${orderId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (response.ok) {
-        setOrders(orders.map(order => 
-          order.id === orderId ? { ...order, status: newStatus } : order
-        ));
-      }
-    } catch (error) {
-      console.error('Error updating order status:', error);
     }
   };
 
@@ -399,6 +360,8 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
       image: '',
       isVeg: true
     });
+    setSelectedImage(null);
+    setImagePreview('');
   };
 
   const handleSaveItem = async () => {
