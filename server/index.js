@@ -27,7 +27,10 @@ const Reservation = require('./models/Reservation');
 const Order = require('./models/Order');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://restaurant-website-pea7.vercel.app', 'http://localhost:3000', 'https://restaurant-website-jy83.onrender.com'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static files from uploads folder with CORS headers
@@ -106,6 +109,15 @@ try {
 } catch (error) {
     console.log('Payments routes not available yet');
 }
+
+// Test endpoint for connectivity check
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'Backend is working!',
+    timestamp: new Date().toISOString(),
+    origin: req.headers.origin
+  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -629,6 +629,24 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
                   🔄 Refresh Orders
                 </button>
                 <button 
+                  className="test-btn" 
+                  onClick={async () => {
+                    console.log('🔍 Testing backend connectivity...');
+                    const apiUrl = process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api';
+                    try {
+                      const response = await fetch(`${apiUrl}/test`);
+                      const data = await response.json();
+                      console.log('✅ Backend test response:', data);
+                      alert(`Backend Connectivity Test:\n\n✅ Status: Connected\n📡 URL: ${apiUrl}\n🕐 Time: ${data.timestamp}\n🌐 Origin: ${data.origin}\n\nBackend is working!`);
+                    } catch (error) {
+                      console.error('❌ Backend test failed:', error);
+                      alert(`Backend Connectivity Test:\n\n❌ Status: Failed\n📡 URL: ${apiUrl}\n🔍 Error: ${error.message}\n\nCheck if backend is running!`);
+                    }
+                  }}
+                >
+                  🔍 Test Backend
+                </button>
+                <button 
                   className="debug-btn" 
                   onClick={() => {
                     console.log('🔍 Debugging orders state...');
