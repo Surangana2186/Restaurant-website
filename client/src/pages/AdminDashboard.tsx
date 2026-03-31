@@ -596,19 +596,28 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
       case 'orders':
         return (
           <div className="tab-content">
-            <h2>Order Management</h2>
-            <p>Manage customer orders and update their status</p>
-            <div className="order-management-link">
-              <button 
-                onClick={() => window.location.href = '/admin-orders'}
-                className="full-manage-btn"
-              >
-                🍽️ Go to Full Order Management Dashboard
-              </button>
+            <div className="orders-header">
+              <h2>Order Management</h2>
+              <div className="header-actions">
+                <button 
+                  className="refresh-btn" 
+                  onClick={() => {
+                    console.log('🔄 Force refreshing orders...');
+                    fetchDashboardData();
+                  }}
+                  disabled={loading}
+                >
+                  🔄 Refresh Orders
+                </button>
+                <span className="last-updated">
+                  Last updated: {new Date().toLocaleTimeString()}
+                </span>
+              </div>
             </div>
+            
             <div className="quick-stats">
               <div className="stat-card">
-                <h3>📊 Quick Order Stats</h3>
+                <h3>📊 Order Statistics</h3>
                 <div className="stats-grid">
                   <div className="stat-item">
                     <span className="stat-number">{orders.filter(o => o.status === 'pending').length}</span>
@@ -628,6 +637,114 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="orders-list">
+              {orders.length === 0 ? (
+                <div className="no-orders">
+                  <h3>🛒 No Orders Yet</h3>
+                  <p>When customers place orders, they will appear here for management.</p>
+                </div>
+              ) : (
+                orders.map((order, index) => (
+                  <div key={order._id || index} className="order-card">
+                    <div className="order-header">
+                      <div className="order-info">
+                        <h3>Order #{order._id ? order._id.slice(-8) : index + 1}</h3>
+                        <span className={`status-badge status-${order.status}`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="order-meta">
+                        <span className="order-date">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </span>
+                        <span className="order-payment">
+                          {order.paymentMethod === 'cod' ? '💰 COD' : '💳 Online'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="order-customer">
+                      <h4>Customer Information</h4>
+                      <div className="customer-details">
+                        <div className="detail-item">
+                          <span className="detail-icon">👤</span>
+                          <span>{order.customerInfo?.name || 'Unknown'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">📧</span>
+                          <span>{order.customerInfo?.email || 'No email'}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-icon">📞</span>
+                          <span>{order.customerInfo?.phone || 'No phone'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="order-items">
+                      <h4>Order Items ({order.items?.length || 0})</h4>
+                      <div className="items-list">
+                        {order.items?.map((item: any, itemIndex: number) => (
+                          <div key={itemIndex} className="order-item">
+                            <div className="item-info">
+                              <span className="item-name">{item.name}</span>
+                              <span className="item-quantity">x{item.quantity}</span>
+                            </div>
+                            <span className="item-price">₹{item.price * item.quantity}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="order-total">
+                      <div className="total-breakdown">
+                        <div className="total-row">
+                          <span>Subtotal:</span>
+                          <span>₹{order.items?.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) || 0}</span>
+                        </div>
+                        <div className="total-row">
+                          <span>Service Charge:</span>
+                          <span>₹5</span>
+                        </div>
+                        <div className="total-row">
+                          <span>Tax (5%):</span>
+                          <span>₹{((order.items?.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0) || 0) * 0.05).toFixed(2)}</span>
+                        </div>
+                        <div className="total-row final-total">
+                          <span>Total:</span>
+                          <span>₹{order.totalAmount}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="order-actions">
+                      <div className="status-update">
+                        <select 
+                          className="status-select"
+                          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                          value={order.status}
+                        >
+                          <option value="pending">🟡 Pending</option>
+                          <option value="preparing">🔵 Preparing</option>
+                          <option value="ready">🟢 Ready</option>
+                          <option value="completed">✅ Completed</option>
+                        </select>
+                      </div>
+                      
+                      <button 
+                        className="action-btn view-btn"
+                        onClick={() => {
+                          alert(`Order Details:\n\nOrder ID: ${order._id}\nCustomer: ${order.customerInfo?.name}\nEmail: ${order.customerInfo?.email}\nPhone: ${order.customerInfo?.phone}\nStatus: ${order.status}\nPayment: ${order.paymentMethod}\nTotal: ₹${order.totalAmount}\nItems: ${order.items?.length || 0}`);
+                        }}
+                      >
+                        👁️ View
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         );
