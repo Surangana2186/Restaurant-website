@@ -102,9 +102,11 @@ const Header: React.FC = () => {
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="header-container">
-        <div className="logo">
-          <div className="logo-circle">D</div>
-          <span className="logo-text">Dine n Delight</span>
+        <div className="logo-section">
+          <Link to="/" className="logo">
+            <div className="logo-circle">D</div>
+            <span className="logo-text">Dine n Delight</span>
+          </Link>
         </div>
         
         <nav className="nav">

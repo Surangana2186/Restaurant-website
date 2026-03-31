@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .image-container {
+            margin: 10px 0;
+        }
+        .image-container img {
+            max-width: 300px;
+            height: auto;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .loading {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Image Upload Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Backend Connection Test</h2>
+        <div id="backend-status" class="status loading">Testing backend connection...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. API Menu Test</h2>
+        <div id="api-status" class="status loading">Testing API...</div>
+        <div id="menu-items"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Direct Image Test (Static File)</h2>
+        <div id="static-image-status" class="status loading">Testing static image serving...</div>
+        <div class="image-container">
+            <img id="static-image" src="http://localhost:5000/uploads/menu-items/menu-item-1774883279456-797232171.webp" 
+                 alt="Static Test Image" onload="handleImageLoad('static-image-status', 'success')" 
+                 onerror="handleImageError('static-image-status', 'error')">
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Direct Image Test (Route)</h2>
+        <div id="route-image-status" class="status loading">Testing route image serving...</div>
+        <div class="image-container">
+            <img id="route-image" src="http://localhost:5000/test-image" 
+                 alt="Route Test Image" onload="handleImageLoad('route-image-status', 'success')" 
+                 onerror="handleImageError('route-image-status', 'error')">
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Menu Item Images Test</h2>
+        <div id="menu-images-status" class="status loading">Testing menu item images...</div>
+        <div id="menu-images"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>6. Debug Information</h2>
+        <pre id="debug-info"></pre>
+    </div>
+
+    <script>
+        // Utility functions
+        function handleImageLoad(statusId, statusType) {
+            const element = document.getElementById(statusId);
+            element.className = `status ${statusType}`;
+            element.textContent = statusType === 'success' ? '✅ Image loaded successfully!' : '❌ Image failed to load';
+        }
+        
+        function handleImageError(statusId, statusType) {
+            const element = document.getElementById(statusId);
+            element.className = `status ${statusType}`;
+            element.textContent = '❌ Image failed to load';
+        }
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.className = `status ${type}`;
+            element.textContent = message;
+        }
+        
+        // Test 1: Backend Connection
+        fetch('http://localhost:5000/')
+            .then(response => {
+                if (response.ok) {
+                    updateStatus('backend-status', '✅ Backend connection successful', 'success');
+                } else {
+                    updateStatus('backend-status', `❌ Backend responded with ${response.status}`, 'error');
+                }
+            })
+            .catch(error => {
+                updateStatus('backend-status', `❌ Backend connection failed: ${error.message}`, 'error');
+            });
+        
+        // Test 2: API Menu Test
+        fetch('http://localhost:5000/api/admin/menu')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.menuItems) {
+                    updateStatus('api-status', `✅ API working! Found ${data.menuItems.length} menu items`, 'success');
+                    
+                    const menuContainer = document.getElementById('menu-items');
+                    menuContainer.innerHTML = '<h3>Menu Items:</h3>';
+                    
+                    data.menuItems.forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.style.margin = '10px 0';
+                        itemDiv.style.padding = '10px';
+                        itemDiv.style.border = '1px solid #ddd';
+                        itemDiv.style.borderRadius = '4px';
+                        
+                        const imageUrl = item.image.startsWith('/uploads/') 
+                            ? `http://localhost:5000${item.image}` 
+                            : item.image;
+                        
+                        itemDiv.innerHTML = `
+                            <strong>${item.name}</strong> - ₹${item.price}<br>
+                            <small>Image URL: ${item.image}</small><br>
+                            <small>Full URL: ${imageUrl}</small>
+                        `;
+                        
+                        menuContainer.appendChild(itemDiv);
+                    });
+                    
+                    // Test 5: Menu Item Images
+                    const menuImagesContainer = document.getElementById('menu-images');
+                    menuImagesContainer.innerHTML = '<h3>Menu Item Images:</h3>';
+                    
+                    data.menuItems.forEach(item => {
+                        if (item.image) {
+                            const imageUrl = item.image.startsWith('/uploads/') 
+                                ? `http://localhost:5000${item.image}` 
+                                : item.image;
+                            
+                            const imageDiv = document.createElement('div');
+                            imageDiv.style.margin = '10px 0';
+                            imageDiv.style.display = 'inline-block';
+                            imageDiv.style.verticalAlign = 'top';
+                            
+                            imageDiv.innerHTML = `
+                                <div style="text-align: center;">
+                                    <img src="${imageUrl}" alt="${item.name}" 
+                                         style="max-width: 200px; height: auto; border: 2px solid #ccc; border-radius: 8px;"
+                                         onload="this.style.border='2px solid green';"
+                                         onerror="this.style.border='2px solid red'; this.src='https://via.placeholder.com/200x150?text=Error';">
+                                    <br><strong>${item.name}</strong><br>
+                                    <small>${imageUrl}</small>
+                                </div>
+                            `;
+                            
+                            menuImagesContainer.appendChild(imageDiv);
+                        }
+                    });
+                    
+                    updateStatus('menu-images-status', '✅ Menu item images loaded', 'success');
+                } else {
+                    updateStatus('api-status', '❌ API response invalid', 'error');
+                }
+            })
+            .catch(error => {
+                updateStatus('api-status', `❌ API request failed: ${error.message}`, 'error');
+            });
+        
+        // Test 6: Debug Information
+        const debugInfo = {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            backendUrl: 'http://localhost:5000',
+            frontendUrl: window.location.origin,
+            testImageUrl: 'http://localhost:5000/uploads/menu-items/menu-item-1774883279456-797232171.webp',
+            corsEnabled: 'XMLHttpRequest' in window && 'withCredentials' in new XMLHttpRequest()
+        };
+        
+        document.getElementById('debug-info').textContent = JSON.stringify(debugInfo, null, 2);
+        
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>

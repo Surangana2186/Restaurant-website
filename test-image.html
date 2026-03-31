@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+</head>
+<body>
+    <h1>Image Upload Test</h1>
+    
+    <h2>Test 1: Direct Image URL</h2>
+    <img src="http://localhost:5000/uploads/menu-items/menu-item-1774882434375-284376035.webp" 
+         alt="Test Image" style="max-width: 300px; border: 2px solid #ccc;" 
+         onerror="console.error('Image failed to load'); this.style.background='red';">
+    
+    <h2>Test 2: API Response</h2>
+    <div id="api-result">Loading...</div>
+    
+    <h2>Test 3: Debug Info</h2>
+    <div id="debug-info"></div>
+
+    <script>
+        // Test API
+        fetch('http://localhost:5000/api/admin/menu')
+            .then(response => response.json())
+            .then(data => {
+                const pulaoItem = data.menuItems.find(item => item.name === 'Pulao');
+                if (pulaoItem) {
+                    document.getElementById('api-result').innerHTML = `
+                        <p><strong>Found Pulao item:</strong></p>
+                        <p>Name: ${pulaoItem.name}</p>
+                        <p>Image URL: ${pulaoItem.image}</p>
+                        <p>Full URL: http://localhost:5000${pulaoItem.image}</p>
+                        <img src="http://localhost:5000${pulaoItem.image}" 
+                             alt="Pulao" style="max-width: 200px; border: 1px solid #ccc;"
+                             onerror="console.error('API image failed to load');">
+                    `;
+                } else {
+                    document.getElementById('api-result').innerHTML = '<p>Pulao item not found</p>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('api-result').innerHTML = `<p>Error: ${error.message}</p>`;
+            });
+        
+        // Debug info
+        const debugInfo = {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            backendUrl: 'http://localhost:5000',
+            imageUrl: '/uploads/menu-items/menu-item-1774882434375-284376035.webp',
+            fullImageUrl: 'http://localhost:5000/uploads/menu-items/menu-item-1774882434375-284376035.webp'
+        };
+        
+        document.getElementById('debug-info').innerHTML = `
+            <pre>${JSON.stringify(debugInfo, null, 2)}</pre>
+        `;
+        
+        // Test image accessibility
+        const img = new Image();
+        img.onload = () => console.log('Image loaded successfully');
+        img.onerror = () => console.error('Image failed to load');
+        img.src = 'http://localhost:5000/uploads/menu-items/menu-item-1774882434375-284376035.webp';
+    </script>
+</body>
+</html>

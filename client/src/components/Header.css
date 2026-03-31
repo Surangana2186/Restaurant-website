@@ -13,11 +13,10 @@
 }
 
 .header-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 0 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 70px;
 }
@@ -41,7 +40,14 @@
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
-/* Logo Styles */
+/* Logo Section */
+.logo-section {
+  display: flex;
+  align-items: center;
+  order: 0; /* Keep on far left */
+  margin-right: 20px; /* Add some space after logo */
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -78,6 +84,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  flex: 1;
+  justify-content: space-between;
 }
 
 .nav a,
