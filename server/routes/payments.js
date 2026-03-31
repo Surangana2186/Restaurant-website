@@ -51,7 +51,7 @@ router.post('/verify', async (req, res) => {
       // Create order in database
       const order = new Order({
         user: user._id,
-        items: order_details.items || [],
+        items: order_details.items || order_details, // Handle both cartItems and items
         totalAmount: amount / 100, // Convert back from paise
         status: 'secured',
         paymentStatus: 'paid',
@@ -67,7 +67,13 @@ router.post('/verify', async (req, res) => {
       });
 
       await order.save();
-      console.log('Order saved to database:', order);
+      console.log('✅ Order saved to database:', order);
+      console.log('📋 Order details:', {
+        id: order._id,
+        status: order.status,
+        totalAmount: order.totalAmount,
+        itemsCount: Array.isArray(order_details.items) ? order_details.items.length : (Array.isArray(order_details) ? order_details.length : 0)
+      });
 
       // Send order confirmation email
       try {
