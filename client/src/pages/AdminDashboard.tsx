@@ -156,7 +156,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (userId: any) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/users/${userId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/auth/users/${userId}`, {
           method: 'DELETE'
         });
         
@@ -176,7 +176,7 @@ const AdminDashboard = () => {
 
   const fetchRegisteredUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/users');
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/auth/users`);
       const users = await response.json();
       console.log('Fetched registered users:', users);
       setRegisteredUsers(users);
@@ -208,7 +208,7 @@ const AdminDashboard = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/menu');
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/menu`);
       if (!response.ok) {
         throw new Error(`Menu items fetch failed: ${response.status}`);
       }
@@ -224,8 +224,8 @@ const AdminDashboard = () => {
     try {
       console.log('Fetching dashboard data...');
       const [statsResponse, ordersResponse] = await Promise.all([
-        fetch('http://localhost:5000/api/admin/stats'),
-        fetch('http://localhost:5000/api/orders/all')
+        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/stats`),
+        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all`)
       ]);
 
       console.log('Stats response:', statsResponse.status);
@@ -278,7 +278,7 @@ const AdminDashboard = () => {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -327,8 +327,8 @@ const AdminDashboard = () => {
       }
       
       const url = editingItem 
-        ? `http://localhost:5000/api/admin/menu/${editingItem._id || editingItem.id}`
-        : 'http://localhost:5000/api/admin/menu';
+        ? `${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/menu/${editingItem._id || editingItem.id}`
+        : `${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/menu`;
       
       const method = editingItem ? 'PUT' : 'POST';
       
@@ -414,7 +414,7 @@ const AdminDashboard = () => {
   const handleDeleteItem = async (itemId: string | number) => {
     if (window.confirm('Are you sure you want to delete this item?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/admin/menu/${itemId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/menu/${itemId}`, {
           method: 'DELETE'
         });
         
