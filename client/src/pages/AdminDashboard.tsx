@@ -59,6 +59,7 @@ const AdminDashboard = () => {
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [showAddItemForm, setShowAddItemForm] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
+  const [backendError, setBackendError] = useState(false);
   const [newItem, setNewItem] = useState({
     name: '',
     category: 'main-course',
@@ -238,7 +239,11 @@ const AdminDashboard = () => {
       // Add cache-busting to orders fetch
       const timestamp = new Date().getTime();
       const random = Math.random();
-      const ordersResponse = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all?t=${timestamp}&r=${random}`, {
+      const apiUrl = process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api';
+      
+      console.log('🌐 Using API URL:', apiUrl);
+      
+      const ordersResponse = await fetch(`${apiUrl}/orders/all?t=${timestamp}&r=${random}`, {
         cache: 'no-cache',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -247,7 +252,7 @@ const AdminDashboard = () => {
         }
       });
 
-      console.log('� Orders response status:', ordersResponse.status);
+      console.log('🛒 Orders response status:', ordersResponse.status);
       console.log('🛒 Orders response headers:', Object.fromEntries(ordersResponse.headers.entries()));
       
       if (!ordersResponse.ok) {
@@ -305,7 +310,10 @@ const AdminDashboard = () => {
         message: error.message,
         stack: error.stack
       });
+      
+      // Set backend connection error state
       setOrders([]);
+      setBackendError(true);
     }
   };
 
@@ -647,6 +655,36 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
               <div className="loading-state">
                 <h3>🔄 Loading Orders...</h3>
                 <p>Please wait while we fetch your order data.</p>
+              </div>
+            ) : backendError ? (
+              <div className="backend-error-state">
+                <h3>🔌 Backend Connection Error</h3>
+                <p>Unable to connect to the backend server. Please check:</p>
+                <ul>
+                  <li>Backend server is running</li>
+                  <li>API URL is correct</li>
+                  <li>Network connection is stable</li>
+                </ul>
+                <div className="error-actions">
+                  <button 
+                    className="retry-btn"
+                    onClick={() => {
+                      setBackendError(false);
+                      fetchDashboardData();
+                    }}
+                  >
+                    🔄 Retry Connection
+                  </button>
+                  <button 
+                    className="debug-btn"
+                    onClick={() => {
+                      const apiUrl = process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api';
+                      alert(`Debug Info:\n\nAPI URL: ${apiUrl}\nBackend Error: Connection Refused\n\nTo fix this:\n1. Start backend server locally\n2. Or update API URL in .env file`);
+                    }}
+                  >
+                    🔍 Debug Connection
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="orders-list">
