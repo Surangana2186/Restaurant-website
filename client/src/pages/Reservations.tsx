@@ -27,7 +27,7 @@ const Reservations = () => {
     console.log('Submitting reservation:', formData);
     
     try {
-      const response = await fetch('http://localhost:5000/api/reservations', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

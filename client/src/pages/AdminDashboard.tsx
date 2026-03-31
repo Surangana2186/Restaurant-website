@@ -194,7 +194,7 @@ const AdminDashboard = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/reservations');
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations`);
       if (!response.ok) {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
@@ -440,7 +440,7 @@ const AdminDashboard = () => {
     console.log('Updating reservation:', { reservationId, newStatus });
     
     try {
-      const response = await fetch(`http://localhost:5000/api/reservations/${reservationId}/status`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations/${reservationId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -481,7 +481,7 @@ const AdminDashboard = () => {
   const handleDeleteReservation = async (reservationId: string | number) => {
     if (window.confirm('Are you sure you want to delete this reservation?')) {
       try {
-        const response = await fetch(`http://localhost:5000/api/reservations/${reservationId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations/${reservationId}`, {
           method: 'DELETE'
         });
         

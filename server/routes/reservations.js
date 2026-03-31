@@ -110,6 +110,16 @@ router.put('/:id/status', async (req, res) => {
       }
     }
 
+    // Send cancellation email when status changes to 'cancelled'
+    if (status === 'cancelled') {
+      const emailSent = await sendReservationCancellation(reservation);
+      if (emailSent) {
+        console.log('✅ Cancellation email sent successfully');
+      } else {
+        console.log('⚠️ Failed to send cancellation email');
+      }
+    }
+
     res.json({ 
       message: 'Reservation status updated successfully', 
       reservation: {
