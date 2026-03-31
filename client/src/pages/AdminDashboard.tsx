@@ -199,7 +199,26 @@ const AdminDashboard = () => {
         throw new Error(`Reservations fetch failed: ${response.status}`);
       }
       const reservationsData = await response.json();
-      setReservations(reservationsData || []);
+      
+      // Merge with existing reservations to preserve recent updates
+      setReservations(prevReservations => {
+        const existingMap = new Map(prevReservations.map((r: any) => [r._id, r]));
+        const serverMap = new Map(reservationsData.map((r: any) => [r._id, r]));
+        
+        // Keep local version if it was updated more recently
+        const merged = Array.from(serverMap.values()).map((serverReservation: any) => {
+          const localReservation = existingMap.get(serverReservation._id);
+          if (localReservation && localReservation.lastUpdated) {
+            // Keep local version if it was updated recently
+            return localReservation.lastUpdated > (serverReservation.lastUpdated || 0) 
+              ? localReservation 
+              : serverReservation;
+          }
+          return serverReservation;
+        });
+        
+        return merged;
+      });
     } catch (error) {
       console.error('Error fetching reservations:', error);
       setReservations([]);
@@ -456,10 +475,15 @@ const AdminDashboard = () => {
         setReservations(prevReservations => 
           prevReservations.map(reservation => 
             reservation._id === reservationId 
-              ? { ...reservation, status: newStatus }
+              ? { ...reservation, status: newStatus, lastUpdated: Date.now() }
               : reservation
           )
         );
+        
+        // Also refresh data from server to ensure consistency
+        setTimeout(() => {
+          fetchReservations();
+        }, 2000); // Wait 2 seconds before refreshing
         
         alert(`Reservation status updated to ${newStatus}`);
       } else {
