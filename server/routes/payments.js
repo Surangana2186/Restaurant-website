@@ -53,7 +53,7 @@ router.post('/verify', async (req, res) => {
         user: user._id,
         items: order_details.items || [],
         totalAmount: amount / 100, // Convert back from paise
-        status: 'confirmed',
+        status: 'secured',
         paymentStatus: 'paid',
         payment_id: payment_id,
         customerInfo: {
@@ -99,7 +99,7 @@ router.post('/verify', async (req, res) => {
         amount: amount / 100,
         customer_info,
         order_details,
-        status: 'Confirmed',
+        status: 'secured',
         created_at: new Date().toISOString()
       };
 
