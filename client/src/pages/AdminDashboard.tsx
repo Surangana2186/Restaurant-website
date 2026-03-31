@@ -233,67 +233,78 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      console.log('🔄 Fetching dashboard data...');
+      console.log('🔄 Fetching orders data...');
       
       // Add cache-busting to orders fetch
       const timestamp = new Date().getTime();
-      const [statsResponse, ordersResponse] = await Promise.all([
-        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/admin/stats`),
-        fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all?t=${timestamp}`, {
-          cache: 'no-cache',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-          }
-        })
-      ]);
+      const random = Math.random();
+      const ordersResponse = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all?t=${timestamp}&r=${random}`, {
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
 
-      console.log('📊 Stats response:', statsResponse.status);
-      console.log('🛒 Orders response:', ordersResponse.status);
-
-      if (!statsResponse.ok) {
-        console.log('⚠️ Stats fetch failed, using fallback');
-      }
+      console.log('� Orders response status:', ordersResponse.status);
+      console.log('🛒 Orders response headers:', Object.fromEntries(ordersResponse.headers.entries()));
       
       if (!ordersResponse.ok) {
-        throw new Error(`Orders fetch failed: ${ordersResponse.status}`);
+        throw new Error(`Orders fetch failed: ${ordersResponse.status} ${ordersResponse.statusText}`);
       }
 
       const ordersData = await ordersResponse.json();
-      console.log('🛒 Orders data:', ordersData);
-      console.log('🛒 Orders count:', ordersData.orders?.length || 0);
+      console.log('🛒 Raw orders data:', ordersData);
+      console.log('🛒 Orders data structure:', {
+        success: ordersData.success,
+        ordersCount: ordersData.orders?.length,
+        count: ordersData.count,
+        hasOrders: !!ordersData.orders,
+        ordersArray: Array.isArray(ordersData.orders)
+      });
 
       // Store orders in state
-      if (ordersData.success && ordersData.orders) {
+      if (ordersData.success && ordersData.orders && Array.isArray(ordersData.orders)) {
         console.log('✅ Setting orders state with', ordersData.orders.length, 'orders');
         console.log('🛒 Order details:', ordersData.orders.map((o: any) => ({ 
           id: o._id, 
           customer: o.customerInfo?.name, 
           status: o.status,
           amount: o.totalAmount,
-          payment: o.paymentMethod
+          payment: o.paymentMethod,
+          itemCount: o.items?.length || 0
         })));
         setOrders(ordersData.orders);
       } else {
         console.log('❌ Orders data structure issue:', ordersData);
-        setOrders([]);
+        console.log('❌ Trying alternative data extraction...');
+        
+        // Try different possible structures
+        let orders = [];
+        if (Array.isArray(ordersData)) {
+          orders = ordersData;
+        } else if (ordersData.data && Array.isArray(ordersData.data)) {
+          orders = ordersData.data;
+        } else if (ordersData.orders && Array.isArray(ordersData.orders)) {
+          orders = ordersData.orders;
+        }
+        
+        if (orders.length > 0) {
+          console.log('✅ Found orders in alternative structure:', orders.length);
+          setOrders(orders);
+        } else {
+          console.log('❌ No orders found in any structure');
+          setOrders([]);
+        }
       }
 
-      // Update stats with real order count
-      setStats(prevStats => [
-        { ...prevStats[0] },
-        { ...prevStats[1] },
-        { ...prevStats[2] },
-        { 
-          title: 'Total Orders', 
-          value: (ordersData.success ? ordersData.orders.length : 0).toLocaleString(), 
-          icon: '🛒' 
-        }
-      ]);
-
     } catch (error) {
-      console.error('❌ Error fetching dashboard data:', error);
+      console.error('❌ Error fetching orders:', error);
+      console.error('❌ Error details:', {
+        message: error.message,
+        stack: error.stack
+      });
       setOrders([]);
     }
   };
@@ -608,6 +619,23 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
                   disabled={loading}
                 >
                   🔄 Refresh Orders
+                </button>
+                <button 
+                  className="debug-btn" 
+                  onClick={() => {
+                    console.log('🔍 Debugging orders state...');
+                    console.log('📋 Current orders state:', orders);
+                    console.log('📋 Orders length:', orders.length);
+                    console.log('📋 Orders details:', orders.map((o: any) => ({
+                      id: o._id,
+                      customer: o.customerInfo?.name,
+                      status: o.status,
+                      amount: o.totalAmount
+                    })));
+                    alert(`Debug Info:\n\nOrders in state: ${orders.length}\nOrders data: ${JSON.stringify(orders.map((o: any) => ({id: o._id, customer: o.customerInfo?.name, status: o.status})), null, 2)}`);
+                  }}
+                >
+                  🔍 Debug Orders
                 </button>
                 <span className="last-updated">
                   Last updated: {new Date().toLocaleTimeString()}

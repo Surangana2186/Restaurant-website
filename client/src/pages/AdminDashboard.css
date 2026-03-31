@@ -1265,6 +1265,27 @@
   cursor: not-allowed;
 }
 
+.debug-btn {
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+}
+
+.debug-btn:hover {
+  background: #7c3aed;
+}
+
+.debug-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .last-updated {
   font-size: 0.8rem;
   color: #666;
