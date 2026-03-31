@@ -132,10 +132,7 @@ router.put('/:id/status', async (req, res) => {
 
     res.json({ 
       message: 'Reservation status updated successfully', 
-      reservation: {
-        ...reservation.toObject(),
-        status
-      }
+      reservation: reservation.toObject() // Return the full updated reservation
     });
   } catch (error) {
     console.error('Error updating reservation:', error);

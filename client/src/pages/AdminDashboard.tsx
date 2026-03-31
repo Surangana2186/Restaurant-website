@@ -446,7 +446,7 @@ const AdminDashboard = () => {
 
   // Reservation Management Functions
   const handleUpdateReservationStatus = async (reservationId: string | number, newStatus: string) => {
-    console.log('Updating reservation:', { reservationId, newStatus });
+    console.log('🔄 Starting status update:', { reservationId, newStatus });
     
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/reservations/${reservationId}/status`, {
@@ -460,18 +460,24 @@ const AdminDashboard = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Update response:', result);
+        console.log('Updated reservation from server:', result.reservation);
+        console.log('Status in response:', result.reservation.status);
         
-        // Update local state immediately
-        setReservations(prevReservations => 
-          prevReservations.map(reservation => 
+        // Update local state with the updated reservation from server
+        setReservations(prevReservations => {
+          console.log('Previous reservations:', prevReservations.map(r => ({ id: r._id, status: r.status })));
+          const updated = prevReservations.map(reservation => 
             reservation._id === reservationId 
-              ? { ...reservation, status: newStatus }
+              ? result.reservation // Use the updated reservation from server response
               : reservation
-          )
-        );
+          );
+          console.log('Updated reservations:', updated.map(r => ({ id: r._id, status: r.status })));
+          return updated;
+        });
         
         // Refresh data from server after a short delay to ensure consistency
         setTimeout(() => {
+          console.log('🔄 Triggering delayed refresh...');
           fetchReservations();
         }, 1000); // Wait 1 second before refreshing
         
