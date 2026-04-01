@@ -53,7 +53,7 @@ router.post('/verify', async (req, res) => {
         user: user._id,
         items: order_details.items || order_details, // Handle both cartItems and items
         totalAmount: amount / 100, // Convert back from paise
-        status: 'secured',
+        status: 'confirmed',
         paymentStatus: 'paid',
         payment_id: payment_id,
         customerInfo: {
@@ -74,6 +74,7 @@ router.post('/verify', async (req, res) => {
         totalAmount: order.totalAmount,
         itemsCount: Array.isArray(order_details.items) ? order_details.items.length : (Array.isArray(order_details) ? order_details.length : 0)
       });
+      console.log('💰 Payment verified - Order status set to:', order.status);
 
       // Send order confirmation email
       try {
@@ -105,7 +106,7 @@ router.post('/verify', async (req, res) => {
         amount: amount / 100,
         customer_info,
         order_details,
-        status: 'secured',
+        status: 'confirmed',
         created_at: new Date().toISOString()
       };
 
