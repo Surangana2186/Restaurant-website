@@ -77,9 +77,14 @@ const AdminOrderManagement: React.FC = () => {
   };
 
   const updateOrderStatus = async (orderId: string, newStatus: 'pending' | 'confirmed' | 'preparing' | 'served' | 'completed' | 'cancelled') => {
+    console.log('🔄 Updating order status:', { orderId, newStatus });
     setUpdatingOrderId(orderId);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/${orderId}/status`, {
+      const apiUrl = `${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/${orderId}/status`;
+      console.log('📡 Calling API:', apiUrl);
+      console.log('📤 Request body:', { status: newStatus });
+      
+      const response = await fetch(apiUrl, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,16 +92,22 @@ const AdminOrderManagement: React.FC = () => {
         body: JSON.stringify({ status: newStatus }),
       });
 
+      console.log('📥 Response status:', response.status);
+      console.log('📥 Response ok:', response.ok);
+
       if (response.ok) {
         // Update local state
         setOrders(orders.map(order => 
           order._id === orderId ? { ...order, status: newStatus } : order
         ));
+        console.log('✅ Order status updated successfully');
       } else {
-        alert('Failed to update order status');
+        const errorData = await response.json();
+        console.error('❌ Failed to update order status:', errorData);
+        alert(`Failed to update order status: ${errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('Error updating order status:', error);
+      console.error('❌ Error updating order status:', error);
       alert('Error updating order status');
     } finally {
       setUpdatingOrderId(null);
