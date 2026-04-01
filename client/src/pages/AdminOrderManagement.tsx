@@ -360,7 +360,7 @@ const AdminOrderManagement: React.FC = () => {
                   <div className="order-items-section">
                     <h3>🍽️ Ordered Items</h3>
                     <div className="items-grid">
-                      {order.items && order.items.length > 0 ? (
+                      {order.items && Array.isArray(order.items) && order.items.length > 0 ? (
                         order.items.map((item, index) => (
                           <div key={index} className="item-card">
                             <div className="item-name">{item.name || 'Unknown Item'}</div>
@@ -375,7 +375,9 @@ const AdminOrderManagement: React.FC = () => {
                       ) : (
                         <div className="no-items">
                           <p>📦 No items available</p>
-                          <small>Order data: {JSON.stringify(order.items || 'undefined', null, 2)}</small>
+                          <small>Order items type: {typeof order.items}</small>
+                          <small>Order items value: {JSON.stringify(order.items, null, 2)}</small>
+                          <small>Order items length: {order.items?.length || 'N/A'}</small>
                         </div>
                       )}
                     </div>
