@@ -1430,7 +1430,7 @@ Date: ${order.createdAt ? new Date(order.createdAt).toLocaleString() : 'N/A'}
                         
                         <button 
                           className="action-btn view-btn"
-                          onClick={() => handleViewReservation(reservation)}
+                          onClick={() => handleEditReservation(reservation)}
                         >
                           View
                         </button>
