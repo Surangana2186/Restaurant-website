@@ -42,19 +42,26 @@ const AdminOrderManagement: React.FC = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all`);
-      const data = await response.json();
+      const apiUrl = `${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/orders/all`;
+      console.log('🔄 Fetching orders from:', apiUrl);
       
-      console.log('Orders response:', data);
+      const response = await fetch(apiUrl);
+      console.log('📊 Response status:', response.status);
+      console.log('📊 Response ok:', response.ok);
+      
+      const data = await response.json();
+      console.log('📊 Orders response:', data);
+      console.log('📊 Orders count:', data.orders?.length || 0);
       
       if (data.success && data.orders) {
         setOrders(data.orders);
+        console.log('✅ Orders loaded:', data.orders.length);
       } else {
-        console.error('Failed to fetch orders:', data.message);
+        console.error('❌ Failed to fetch orders:', data.message);
         setOrders([]);
       }
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error('❌ Error fetching orders:', error);
       setOrders([]);
     } finally {
       setLoading(false);
@@ -257,6 +264,16 @@ const AdminOrderManagement: React.FC = () => {
             onClick={() => setFilter('cancelled')}
           >
             ❌ Cancelled ({orders.filter(o => o.status === 'cancelled').length})
+          </button>
+          <button 
+            className="refresh-btn"
+            onClick={() => {
+              console.log('🔄 Manual refresh triggered');
+              fetchOrders();
+            }}
+            disabled={loading}
+          >
+            🔄 Refresh ({loading ? 'Loading...' : 'Last: ' + new Date().toLocaleTimeString()})
           </button>
         </div>
 
