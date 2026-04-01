@@ -307,8 +307,8 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('❌ Error fetching orders:', error);
       console.error('❌ Error details:', {
-        message: error.message,
-        stack: error.stack
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
       });
       
       // Set backend connection error state
@@ -606,7 +606,7 @@ const updateOrderStatus = async (orderId: string, newStatus: string) => {
                       alert(`Backend Connectivity Test:\n\n✅ Status: Connected\n📡 URL: ${apiUrl}\n🕐 Time: ${data.timestamp}\n🌐 Origin: ${data.origin}\n\nBackend is working!`);
                     } catch (error) {
                       console.error('❌ Backend test failed:', error);
-                      alert(`Backend Connectivity Test:\n\n❌ Status: Failed\n📡 URL: ${apiUrl}\n🔍 Error: ${error.message}\n\nCheck if backend is running!`);
+                      alert(`Backend Connectivity Test:\n\n❌ Status: Failed\n📡 URL: ${apiUrl}\n🔍 Error: ${error instanceof Error ? error.message : 'Unknown error'}\n\nCheck if backend is running!`);
                     }
                   }}
                 >
