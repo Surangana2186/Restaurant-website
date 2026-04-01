@@ -36,8 +36,8 @@ const Contact: React.FC = () => {
     setSubmitted(true);
     
     try {
-      console.log('Attempting to send request to: http://localhost:5000/api/contact');
-      const response = await fetch('http://localhost:5000/api/contact', {
+      console.log('Attempting to send request to:', `${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/contact`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://restaurant-website-jy83.onrender.com/api'}/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
