@@ -53,6 +53,14 @@ const AdminOrderManagement: React.FC = () => {
       console.log('📊 Orders response:', data);
       console.log('📊 Orders count:', data.orders?.length || 0);
       
+      // Log detailed order structure for debugging
+      if (data.orders && data.orders.length > 0) {
+        console.log('📋 First order structure:', data.orders[0]);
+        console.log('📋 First order items:', data.orders[0].items);
+        console.log('📋 First order status:', data.orders[0].status);
+        console.log('📋 First order customerInfo:', data.orders[0].customerInfo);
+      }
+      
       if (data.success && data.orders) {
         setOrders(data.orders);
         console.log('✅ Orders loaded:', data.orders.length);
@@ -341,17 +349,24 @@ const AdminOrderManagement: React.FC = () => {
                   <div className="order-items-section">
                     <h3>🍽️ Ordered Items</h3>
                     <div className="items-grid">
-                      {order.items?.map((item, index) => (
-                        <div key={index} className="item-card">
-                          <div className="item-name">{item.name}</div>
-                          <div className="item-details">
-                            <span className="item-quantity">× {item.quantity}</span>
-                            {item.price && (
-                              <span className="item-price">₹{(item.price * item.quantity).toFixed(2)}</span>
-                            )}
+                      {order.items && order.items.length > 0 ? (
+                        order.items.map((item, index) => (
+                          <div key={index} className="item-card">
+                            <div className="item-name">{item.name || 'Unknown Item'}</div>
+                            <div className="item-details">
+                              <span className="item-quantity">× {item.quantity || 1}</span>
+                              {item.price && (
+                                <span className="item-price">₹{(item.price * (item.quantity || 1)).toFixed(2)}</span>
+                              )}
+                            </div>
                           </div>
+                        ))
+                      ) : (
+                        <div className="no-items">
+                          <p>📦 No items available</p>
+                          <small>Order data: {JSON.stringify(order.items || 'undefined', null, 2)}</small>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
 
